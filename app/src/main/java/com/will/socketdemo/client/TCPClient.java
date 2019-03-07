@@ -19,6 +19,8 @@ import java.net.UnknownHostException;
  * Description:
  */
 public class TCPClient {
+    private static boolean done = false;
+
     public static void linkWith(client.bean.ServerInfo info) throws IOException {
         Socket socket = new Socket();
         // 超时时间
@@ -41,10 +43,12 @@ public class TCPClient {
         System.out.println("客户端已退出");
     }
 
+    public static void disconnect() {
+        done = true;
+    }
+
     private static void running(Socket client) throws IOException {
-        // 键盘输入流
-        InputStream in = System.in;
-        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        done = false;
 
         // 得到Socket输出流，并转换成打印流
         OutputStream outputStream = client.getOutputStream();
@@ -54,21 +58,19 @@ public class TCPClient {
         InputStream inputStream = client.getInputStream();
         BufferedReader socketBufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        boolean flag = true;
+        int i = 0;
         do {
-            // 键盘读取一行
-            String str = input.readLine();
             // 发送到服务器
-            socketPrintStream.println(str);
+            socketPrintStream.println(String.valueOf(i));
 
             // 从服务器读取一行
             String echo = socketBufferedReader.readLine();
-            if ("bye".equalsIgnoreCase(echo)) {
-                flag = false;
+            if (null == echo) {
+                done = true;
             } else {
                 System.out.println(echo);
             }
-        } while (flag);
+        } while (!done);
 
         socketPrintStream.close();
         socketBufferedReader.close();

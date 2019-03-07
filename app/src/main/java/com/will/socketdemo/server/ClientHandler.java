@@ -34,10 +34,8 @@ public class ClientHandler extends Thread {
             do {
                 // 客户端拿到第一条数据
                 String str = socketInput.readLine();
-                if ("bye".equalsIgnoreCase(str)) {
+                if (null == str) {
                     flag = false;
-                    // 回送
-                    socketOutput.println("bye");
                 } else {
                     // 打印到屏幕，并回送数据长度
                     System.out.println(str);

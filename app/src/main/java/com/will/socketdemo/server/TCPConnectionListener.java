@@ -42,7 +42,7 @@ public class TCPConnectionListener extends Thread {
         System.out.println("服务器关闭");
     }
 
-    void exit() {
+    public void exit() {
         done = true;
         try {
             mServerSocket.close();
